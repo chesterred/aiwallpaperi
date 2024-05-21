@@ -52,13 +52,18 @@ export async function POST(req: Request) {
       return respErr("generate wallpaper failed");
     }
 
+    const img_uuid = genUuid();
     const img_name = encodeURIComponent(description);
     const s3_img = await downloadAndUploadImage(
       raw_img_url,
       process.env.AWS_BUCKET || "trysai",
-      `wallpapers/${img_name}.png`
+      `wallpapers/${img_uuid}.png`
     );
-    const img_url = s3_img.Location;
+
+    let img_url = s3_img.Location;
+    if (process.env.AWS_CDN_DOMAIN) {
+      img_url = `${process.env.AWS_CDN_DOMAIN}/${s3_img.Key}`;
+    }
 
     const wallpaper: Wallpaper = {
       user_email: user_email,
@@ -68,7 +73,7 @@ export async function POST(req: Request) {
       llm_name: llm_name,
       llm_params: JSON.stringify(llm_params),
       created_at: created_at,
-      uuid: genUuid(),
+      uuid: img_uuid,
     };
     await insertWallpaper(wallpaper);
 
