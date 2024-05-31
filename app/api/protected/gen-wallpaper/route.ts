@@ -10,7 +10,8 @@ import { getUserCredits } from "@/services/order";
 import { insertWallpaper } from "@/models/wallpaper";
 
 export const maxDuration = 120;
-
+//接受req=>description, user, res from openai, s3image
+//in req=> desc, user, =>openai=>res, >s3=>s3img, =>wallpaper:Wallpaper
 export async function POST(req: Request) {
   const client = getOpenAIClient();
 
@@ -45,7 +46,20 @@ export async function POST(req: Request) {
     };
     const created_at = new Date().toISOString();
 
-    const res = await client.images.generate(llm_params);
+    //mock response
+    const mockres = {
+      "created": 1699413579,
+      "data": [
+        {
+          "revised_prompt": "Create an anime-style image of a young female character with serene white hair. She has a classic charm reminiscent of popular manga characters. Her features, while unique and striking, evoke a sense of familiarity and comfort, likely due to their adherence to popular anime aesthetics. Her hair, bright and white, cascades down in loose curls, reflecting her youth and vitality. Her eyes, wide and expressive, are shimmering with life, embodying the vibrant spirit of anime heroines.",
+          "url": "https://cdn.pixabay.com/photo/2015/03/17/02/01/cubes-677092_1280.png"
+        }
+      ]
+    }
+    
+    
+    // const res = await client.images.generate(llm_params);
+    const res = mockres;
 
     const raw_img_url = res.data[0].url;
     if (!raw_img_url) {
@@ -65,6 +79,8 @@ export async function POST(req: Request) {
       img_url = `${process.env.AWS_CDN_DOMAIN}/${s3_img.Key}`;
     }
 
+    // mock category
+    const category = "spiderman";
     const wallpaper: Wallpaper = {
       user_email: user_email,
       img_description: description,
@@ -74,6 +90,7 @@ export async function POST(req: Request) {
       llm_params: JSON.stringify(llm_params),
       created_at: created_at,
       uuid: img_uuid,
+      category: category,
     };
     await insertWallpaper(wallpaper);
 

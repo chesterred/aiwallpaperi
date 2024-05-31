@@ -85,6 +85,7 @@ export default function () {
 
     if (!user) {
       toast.error("please sign in");
+      router.push("/sign-in");
       return;
     }
 

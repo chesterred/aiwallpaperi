@@ -78,6 +78,7 @@ export default async function ({ params }: { params: { uuid: string } }) {
                       <a
                         href={`/wallpaper/${wallpaper.uuid}`}
                         className="max-[767px]: flex max-w-full grid-cols-1 flex-col gap-4 rounded-md bg-white py-4 font-bold text-black lg:px-2"
+                        key={idx}
                       >
                         <Image
                           src={wallpaper.img_url}

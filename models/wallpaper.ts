@@ -74,6 +74,59 @@ export async function findWallpaperById(
   return wallpaper;
 }
 
+// single wallpaper with category
+export async function findWallpaperByCat(
+  category: string
+): Promise<Wallpaper | undefined> {
+  const db = getDb();
+  const res = await db.query(
+    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar 
+     from wallpapers as w 
+     left join users as u 
+     on w.user_email = u.email 
+     where w.category = $1`,
+    [category]
+  );
+  if (res.rowCount === 0) {
+    return;
+  }
+
+  const wallpaper = formatWallpaper(res.rows[0]);
+
+  return wallpaper;
+}
+
+//all wallpapers with category
+export async function findAllWallpapersByCat(
+  category: string
+): Promise<Wallpaper[]> {
+  const db = getDb();
+  const res = await db.query(
+    `select w.*, 
+            u.uuid as user_uuid, 
+            u.email as user_email, 
+            u.nickname as user_name, 
+            u.avatar_url as user_avatar 
+     from wallpapers as w 
+     left join users as u 
+     on w.user_email = u.email 
+     where w.category = $1`,
+    [category]
+  );
+
+  if (res.rowCount === 0) {
+    return [];
+  }
+
+  const wallpapers = res.rows
+    .map(row => formatWallpaper(row))
+    .filter((wallpaper): wallpaper is Wallpaper => wallpaper !== undefined);
+
+  return wallpapers;
+}
+
+
+
 export async function findWallpaperByUuid(
   uuid: string
 ): Promise<Wallpaper | undefined> {
@@ -144,6 +197,8 @@ export async function getWallpapers(
   return wallpapers;
 }
 
+
+
 export function getWallpapersFromSqlResult(
   res: QueryResult<QueryResultRow>
 ): Wallpaper[] {
@@ -174,6 +229,7 @@ export function formatWallpaper(row: QueryResultRow): Wallpaper | undefined {
     llm_params: row.llm_params,
     created_at: row.created_at,
     uuid: row.uuid,
+    category: row.category,
   };
 
   if (row.user_name || row.user_avatar) {

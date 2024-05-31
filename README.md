@@ -1,3 +1,26 @@
+用集合页面来匹配关键字 
+集合页内容=描述+各种title
+link=slug
+
+详情页：
+uuid加上关键字,关键字=谷歌搜索词生成的title.
+slug=title+uuid
+左边展示图+右边操作
+展示图：hover有按钮+add your face
+操作栏：描述+上传按钮
+
+wallpaper:
+个人用户
+系统用户
+
+cover图：判断uuid为系统用户
+用户图：抓取uuid为该用户的图
+
+登陆不充值可以生成,登陆充值才能下载高清无水印.
+
+不登陆可以生成,登陆充值才能下载高清无水印.
+换成换脸
+
 # AI Wallpaper
 
 AI Wallpaper Generator by [aiwallpaper.shop](https://aiwallpaper.shop)

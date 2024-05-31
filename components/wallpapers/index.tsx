@@ -5,14 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Wallpaper } from "@/types/wallpaper";
 
-export default async function () {
-  const wallpapers = await getWallpapers(1, 100);
+interface Props {
+  wallpapers: Wallpaper[];
+}
+
+export default async function ({wallpapers}:Props) {
 
   return (
     <section>
       <div className="mx-auto w-full max-w-7xl px-0 py-2 md:px-10 md:py-8 lg:py-8">
         <div className="flex flex-col items-stretch">
-          <div className="gap-x-8 [column-count:1] md:grid-cols-2 md:gap-x-4 md:[column-count:3]">
+          <div className="grid gap-x-8 md:grid-cols-2 md:gap-x-4 lg:grid-cols-3">
+
             {false ? (
               <div className="text-center mx-auto py-4">loading...</div>
             ) : (

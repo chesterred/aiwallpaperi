@@ -11,4 +11,5 @@ export interface Wallpaper {
   created_at: string;
   created_user?: User;
   uuid: string;
+  category: string;
 }

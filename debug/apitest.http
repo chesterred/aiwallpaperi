@@ -1,4 +1,4 @@
-@baseUri=http://127.0.0.1:8010/api 
+@baseUri=http://localhost:3000/api 
 
 ### generate wallpaper
 POST {{baseUri}}/protected/gen-wallpaper
@@ -25,3 +25,11 @@ Content-Type: application/json
 }
 
 
+### repswap params
+POST {{baseUri}}/repswap
+Content-Type: application/json
+
+{
+    "swap_image": "https://www.telegraph.co.uk/multimedia/archive/03249/archetypal-female-_3249633c.jpg",
+    "target_image": "https://replicate.delivery/pbxt/JoBuz3wGiVFQ1TDEcsGZbYcNh0bHpvwOi32T1fmxhRujqcu7/9X2.png"
+}
